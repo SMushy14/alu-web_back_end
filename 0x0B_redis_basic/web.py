@@ -1,38 +1,24 @@
 #!/usr/bin/env python3
 """
-Web file
+Defines a function `get_page`
 """
-import requests
 import redis
-from functools import wraps
-
-store = redis.Redis()
-
-
-def count_url_access(method):
-    """Decorator counting how many times
-    a Url is accessed"""
-
-    @wraps(method)
-    def wrapper(url):
-        cached_key = "cached:" + url
-        cached_data = store.get(cached_key)
-        if cached_data:
-            return cached_data.decode("utf-8")
-
-        count_key = "count:" + url
-        html = method(url)
-
-        store.incr(count_key)
-        store.set(cached_key, html)
-        store.expire(cached_key, 10)
-        return html
-
-    return wrapper
+import requests
+from datetime import timedelta
 
 
-@count_url_access
 def get_page(url: str) -> str:
-    """Returns HTML content of a url"""
+    """
+    It uses the requests module to obtain
+    the HTML content of a particular URL and returns it.
+    Args:
+        url (str): url whose content is to be fectched
+    Returns:
+        html (str): the HTML content of the url
+    """
+    r = redis.Redis()
+    key = "count:{}{}{}".format("{", url, "}")
+    r.incr(key)
     res = requests.get(url)
+    r.setex(url, timedelta(seconds=10), res.text)
     return res.text
