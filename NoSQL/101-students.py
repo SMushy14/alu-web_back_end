@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-""" 14. Top students
-"""
+""" MongoDB Operations with Python using pymongo """
 
 
 def top_students(mongo_collection):
-    """ top_students.
-    """
-    return mongo_collection.aggregate([
+    # sourcery skip: inline-immediately-returned-variable
+    """ Returns all students sorted by average score """
+    top_student = mongo_collection.aggregate([
         {
             "$project": {
                 "name": "$name",
@@ -15,3 +14,5 @@ def top_students(mongo_collection):
         },
         {"$sort": {"averageScore": -1}}
     ])
+
+    return top_student
