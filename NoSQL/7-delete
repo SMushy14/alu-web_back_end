@@ -1,4 +1,0 @@
-// Delete by match
-db.school.deleteMany(
-    { name: "Holberton school" }
-)
