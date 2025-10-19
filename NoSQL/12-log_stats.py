@@ -23,5 +23,4 @@ def run():
     print_nginx_request_logs(client.logs.nginx)
 
 
-if __name__ == "__main__":
     run()
