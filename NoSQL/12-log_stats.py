@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""12. Log stats"""
+"""12. Log stats
+"""
 
 
 from pymongo import MongoClient
 
 
 def log_stats():
-    """Provides some stats about Nginx logs."""
+    """Provides some stats about Nginx logs
+    """
     client = MongoClient()
     collection = client.logs.nginx
-
     total_logs = collection.count_documents({})
     print(f"{total_logs} logs")
     print("Methods:")
@@ -21,6 +22,7 @@ def log_stats():
 
     status_check = collection.count_documents({"method": "GET", "path": "/status"})
     print(f"{status_check} status check")
+
 
 
 log_stats()
