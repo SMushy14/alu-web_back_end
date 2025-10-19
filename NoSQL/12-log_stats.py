@@ -1,28 +1,30 @@
 #!/usr/bin/env python3
-"""12. Log stats
-"""
+"""12. Log stats"""
 
 
 from pymongo import MongoClient
 
 
 def log_stats():
-    """Provides some stats about Nginx logs
-    """
-    client = MongoClient()
-    collection = client.logs.nginx
-    total_logs = collection.count_documents({})
-    print(f"{total_logs} logs")
+    """log_stats."""
+    client = MongoClient("mongodb://127.0.0.1:27017")
+    logs_collection = client.logs.nginx
+    total = logs_collection.count_documents({})
+    get = logs_collection.count_documents({"method": "GET"})
+    post = logs_collection.count_documents({"method": "POST"})
+    put = logs_collection.count_documents({"method": "PUT"})
+    patch = logs_collection.count_documents({"method": "PATCH"})
+    delete = logs_collection.count_documents({"method": "DELETE"})
+    path = logs_collection.count_documents({"method": "GET", "path": "/status"})
+    print(f"{total} logs")
     print("Methods:")
-    print(f"\tmethod GET: {collection.count_documents({'method': 'GET'})}")
-    print(f"\tmethod POST: {collection.count_documents({'method': 'POST'})}")
-    print(f"\tmethod PUT: {collection.count_documents({'method': 'PUT'})}")
-    print(f"\tmethod PATCH: {collection.count_documents({'method': 'PATCH'})}")
-    print(f"\tmethod DELETE: {collection.count_documents({'method': 'DELETE'})}")
-
-    status_check = collection.count_documents({"method": "GET", "path": "/status"})
-    print(f"{status_check} status check")
+    print(f"\tmethod GET: {get}")
+    print(f"\tmethod POST: {post}")
+    print(f"\tmethod PUT: {put}")
+    print(f"\tmethod PATCH: {patch}")
+    print(f"\tmethod DELETE: {delete}")
+    print(f"{path} status check")
 
 
-
-log_stats()
+if __name__ == "__main__":
+    log_stats()
