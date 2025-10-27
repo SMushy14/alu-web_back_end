@@ -1,4 +1,4 @@
-export default class HolbertonClass {
+export default class ALXClass {
   constructor(size, location) {
     this.size = size;
     this.location = location;
